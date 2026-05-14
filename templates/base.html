@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- {{ name }}'s Expense Journal in English -->
+    <!-- {{ name }}'s Kharchanama in Roman Urdu -->
+    <!-- کا خرچہ نامہ {{ name }} in Urdu -->
+    <title>{% block title %}Expense Tracker{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <nav class="navbar">
+        {% if current_user.is_authenticated %}
+            <a class="navbar-brand" href="{{ url_for('home') }}">📒 {{ current_user.username }}'s Expense Tracker</a>
+        {% else %}
+            <a class="navbar-brand" href="{{ url_for('home') }}">📒 Expense Tracker</a>
+        {% endif %}
+        <button class="navbar-toggle" aria-label="Toggle navigation" onclick="this.nextElementSibling.classList.toggle('open')">☰</button>
+        <ul class="navbar-links">
+            {% if current_user.is_authenticated %}
+                <li><a class="nav-link" href="{{ url_for('expenses') }}">My Expenses</a></li>
+                <li><a class="nav-link" href="{{ url_for('add_expense') }}">Add Expense</a></li>
+                <li><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
+            {% else %}
+                <li><a class="nav-link" href="{{ url_for('login') }}">Login</a></li>
+                <li><a class="nav-link" href="{{ url_for('register') }}">Register</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <main class="page-container">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash flash-{{ 'danger' if category == 'error' else category }}">
+                            <span>{{ message }}</span>
+                            <button class="flash-close" onclick="this.parentElement.remove()" aria-label="Dismiss">×</button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+
+    </main>
+
+</body>
+</html>

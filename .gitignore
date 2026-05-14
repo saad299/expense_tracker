@@ -1,0 +1,10 @@
+__pycache__/
+*.db
+instance/
+
+.env
+
+venv/
+*.pyc
+
+migrations/*.pyc

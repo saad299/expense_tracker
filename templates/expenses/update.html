@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Update Expense — Expense Tracker{% endblock %}
+
+{% block content %}
+<div class="card-wrap">
+    <div class="card">
+        <div class="card-header card-header--warning">
+            <h4>Update Expense</h4>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form.amount.label(class="form-label") }}
+                        <div class="input-group">
+                            <span class="input-prefix">$</span>
+                            {{ form.amount(class="form-input" + (" form-input--error" if form.amount.errors else ""), placeholder="0.00") }}
+                        </div>
+                        {% if form.amount.errors %}
+                            <p class="field-error">{% for e in form.amount.errors %}{{ e }}{% endfor %}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.date.label(class="form-label") }}
+                        {{ form.date(class="form-input" + (" form-input--error" if form.date.errors else ""), type="date") }}
+                        {% if form.date.errors %}
+                            <p class="field-error">{% for e in form.date.errors %}{{ e }}{% endfor %}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    {{ form.description.label(class="form-label") }}
+                    {{ form.description(class="form-textarea" + (" form-input--error" if form.description.errors else ""), rows=3, placeholder="What was this expense for?") }}
+                    {% if form.description.errors %}
+                        <p class="field-error">{% for e in form.description.errors %}{{ e }}{% endfor %}</p>
+                    {% endif %}
+                </div>
+
+                <div class="form-actions">
+                    {{ form.submit(class="btn btn-warning") }}
+                    <a href="{{ url_for('expenses') }}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

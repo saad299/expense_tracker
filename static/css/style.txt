@@ -1,0 +1,730 @@
+/* ============================================================
+   NOTEBOOK THEME — Expense Tracker
+   Handwritten, ruled-paper aesthetic
+   Fonts: Caveat (headings) + Kalam (body)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Kalam:wght@300;400;700&display=swap');
+
+/* ── CSS Variables ──────────────────────────────────────── */
+:root {
+  --paper:          #f7f3e9;
+  --paper-dark:     #ede8d5;
+  --paper-aged:     #e8e0c8;
+  --ink:            #1c2b4a;
+  --ink-light:      #3a4f6e;
+  --ink-faint:      #8095b0;
+  --margin-line:    #e05a5a;
+  --rule-line:      #b8cfe0;
+  --rule-line-alt:  #c9dded;
+  --binding-red:    #c0392b;
+  --highlight:      #fffacd;
+  --highlight-b:    #ffeaa7;
+  --green-ink:      #1a6b3a;
+  --red-ink:        #c0392b;
+  --spiral-size:    22px;
+  --line-height-px: 32px;
+}
+
+/* ── Reset & Base ───────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: 'Kalam', cursive;
+  font-weight: 400;
+  color: var(--ink);
+  background-color: #d4cbb5;
+  background-image:
+    radial-gradient(ellipse at 20% 50%, #c8bfa0 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, #bfb899 0%, transparent 50%);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+}
+
+/* ── Page Turn Animation ─────────────────────────────────── */
+@keyframes pageTurnIn {
+  0% {
+    transform: perspective(1800px) rotateY(-22deg) translateX(-30px);
+    opacity: 0;
+    filter: brightness(0.85);
+  }
+  60% {
+    transform: perspective(1800px) rotateY(3deg) translateX(4px);
+    opacity: 1;
+    filter: brightness(1.02);
+  }
+  80% {
+    transform: perspective(1800px) rotateY(-1deg) translateX(-2px);
+  }
+  100% {
+    transform: perspective(1800px) rotateY(0deg) translateX(0);
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
+
+@keyframes fadeLineIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spiralBounce {
+  0%   { transform: scaleY(0); }
+  70%  { transform: scaleY(1.08); }
+  100% { transform: scaleY(1); }
+}
+
+/* ── Spiral Binding ─────────────────────────────────────── */
+.container::before {
+  content: '';
+  display: block;
+  height: 28px;
+  margin: -16px -12px 0;
+  background-image:
+    radial-gradient(circle at center, #888 30%, #bbb 50%, #555 70%),
+    radial-gradient(circle at center, #888 30%, #bbb 50%, #555 70%);
+  background-size: var(--spiral-size) var(--spiral-size);
+  background-repeat: repeat-x;
+  background-position: 10px center;
+  border-radius: 6px 6px 0 0;
+  animation: spiralBounce 0.5s 0.1s ease-out both;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));
+}
+
+/* ── Navbar (Cover Strip) ────────────────────────────────── */
+.navbar {
+  background: linear-gradient(135deg, #1a2744 0%, #2c3e6b 50%, #1a3050 100%) !important;
+  border-bottom: 4px solid var(--binding-red);
+  box-shadow: 0 3px 12px rgba(0,0,0,0.4);
+  font-family: 'Caveat', cursive;
+  padding: 0.6rem 0;
+  position: relative;
+}
+
+.navbar::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0; right: 0;
+  height: 4px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--binding-red) 0px,
+    var(--binding-red) 8px,
+    transparent 8px,
+    transparent 14px
+  );
+}
+
+.navbar-brand {
+  font-family: 'Caveat', cursive !important;
+  font-size: 1.8rem !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+  letter-spacing: 0.05em;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.3), 0 0 20px rgba(255,255,200,0.2);
+  transition: transform 0.2s;
+}
+
+.navbar-brand:hover { transform: rotate(-1deg) scale(1.05); }
+
+.nav-link {
+  font-family: 'Caveat', cursive !important;
+  font-size: 1.2rem !important;
+  font-weight: 500 !important;
+  color: #d4dcf0 !important;
+  transition: color 0.2s, transform 0.2s;
+  padding: 0.4rem 0.9rem !important;
+}
+
+.nav-link:hover {
+  color: #fff !important;
+  transform: rotate(-1.5deg) translateY(-1px);
+}
+
+/* ── Main Container (Notebook Page) ─────────────────────── */
+.container {
+  max-width: 960px;
+  margin: 20px auto;
+  padding: 0 20px 40px;
+  background-color: var(--paper);
+  background-image:
+    /* Red margin line */
+    linear-gradient(
+      90deg,
+      transparent 68px,
+      var(--margin-line) 68px,
+      var(--margin-line) 70px,
+      transparent 70px
+    ),
+    /* Ruled horizontal lines */
+    repeating-linear-gradient(
+      transparent,
+      transparent calc(var(--line-height-px) - 1px),
+      var(--rule-line) calc(var(--line-height-px) - 1px),
+      var(--rule-line) var(--line-height-px)
+    );
+  background-attachment: local;
+  border-left: 6px solid var(--binding-red);
+  border-right: 2px solid var(--paper-dark);
+  border-bottom: 2px solid var(--paper-dark);
+  box-shadow:
+    -2px 0 8px rgba(0,0,0,0.15),
+    4px 4px 20px rgba(0,0,0,0.25),
+    8px 8px 0 rgba(0,0,0,0.08),
+    12px 12px 0 rgba(0,0,0,0.04);
+  min-height: calc(100vh - 80px);
+  transform-origin: left center;
+  animation: pageTurnIn 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  position: relative;
+}
+
+/* Corner fold effect */
+.container::after {
+  content: '';
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 0; height: 0;
+  border-style: solid;
+  border-width: 0 0 36px 36px;
+  border-color: transparent transparent #c8bfa0 transparent;
+  filter: drop-shadow(-2px -2px 3px rgba(0,0,0,0.15));
+}
+
+/* ── Flash Messages ─────────────────────────────────────── */
+.alert {
+  font-family: 'Kalam', cursive;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  position: relative;
+  padding: 0.75rem 1rem 0.75rem 1.5rem;
+  margin-top: 16px;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+  animation: fadeLineIn 0.4s ease both;
+}
+
+.alert::before {
+  content: '✎ ';
+  font-size: 1.1em;
+  opacity: 0.7;
+}
+
+.alert-success   { background: #e8f5e9; color: #1b5e20; border-left: 4px solid #43a047; }
+.alert-danger,
+.alert-error     { background: #fdecea; color: #7f0000; border-left: 4px solid #e53935; }
+.alert-info      { background: #e3f2fd; color: #0d3c61; border-left: 4px solid #1e88e5; }
+.alert-warning   { background: #fffde7; color: #4e3700; border-left: 4px solid #fdd835; }
+
+.btn-close {
+  font-size: 0.75rem;
+  opacity: 0.5;
+}
+
+/* ── Cards (Sticky-Note / Page Sections) ─────────────────── */
+.card {
+  background: linear-gradient(180deg, var(--paper) 0%, #faf6ec 100%);
+  background-image:
+    repeating-linear-gradient(
+      transparent,
+      transparent calc(var(--line-height-px) - 1px),
+      var(--rule-line-alt) calc(var(--line-height-px) - 1px),
+      var(--rule-line-alt) var(--line-height-px)
+    );
+  border: none;
+  border-radius: 3px 3px 6px 3px;
+  box-shadow:
+    0 2px 6px rgba(0,0,0,0.1),
+    3px 4px 12px rgba(0,0,0,0.12),
+    inset 0 0 0 1px rgba(0,0,0,0.06);
+  margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  animation: fadeLineIn 0.5s 0.25s ease both;
+}
+
+/* Tape strip on top of card */
+.card::before {
+  content: '';
+  position: absolute;
+  top: -5px; left: 50%;
+  transform: translateX(-50%) rotate(-1.5deg);
+  width: 80px; height: 22px;
+  background: rgba(255, 250, 180, 0.75);
+  border: 1px solid rgba(200, 190, 100, 0.4);
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  z-index: 1;
+}
+
+.card-header {
+  font-family: 'Caveat', cursive;
+  font-size: 1.5rem;
+  font-weight: 700;
+  padding: 1.2rem 1.5rem 0.8rem;
+  border-bottom: 2px solid var(--rule-line);
+  position: relative;
+  z-index: 2;
+}
+
+/* Override Bootstrap card-header colour classes */
+.card-header.bg-primary {
+  background: transparent !important;
+  color: var(--ink) !important;
+  border-bottom: 2.5px solid #3a6bbf !important;
+}
+
+.card-header.bg-warning {
+  background: transparent !important;
+  color: var(--ink) !important;
+  border-bottom: 2.5px solid var(--margin-line) !important;
+}
+
+.card-header.bg-success {
+  background: transparent !important;
+  color: var(--ink) !important;
+  border-bottom: 2.5px solid var(--green-ink) !important;
+}
+
+.card-header h4 {
+  font-size: 1.6rem;
+  margin: 0;
+}
+
+/* Pencil icon decoration */
+.card-header.bg-primary h4::before { content: '✏ '; opacity: 0.6; }
+.card-header.bg-warning h4::before { content: '✎ '; opacity: 0.6; }
+
+.card-body {
+  padding: 1.5rem 1.8rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Typography ─────────────────────────────────────────── */
+h2 {
+  font-size: 2.2rem;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 4px;
+}
+
+h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--ink-light), transparent);
+  border-radius: 1px;
+}
+
+/* ── Forms ──────────────────────────────────────────────── */
+.form-label {
+  font-family: 'Caveat', cursive;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--ink-light);
+  margin-bottom: 0.2rem;
+  display: block;
+}
+
+.form-control,
+.form-select {
+  font-family: 'Kalam', cursive;
+  font-size: 1rem;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--rule-line);
+  border-radius: 0;
+  padding: 0.4rem 0.3rem;
+  color: var(--ink);
+  transition: border-color 0.25s, background 0.25s;
+  box-shadow: none !important;
+  caret-color: var(--ink);
+}
+
+.form-control:focus,
+.form-select:focus {
+  background: rgba(255, 250, 180, 0.35);
+  border-bottom-color: #3a6bbf;
+  outline: none;
+  box-shadow: none !important;
+}
+
+.form-control::placeholder {
+  font-family: 'Kalam', cursive;
+  color: var(--ink-faint);
+  font-style: italic;
+  font-weight: 300;
+}
+
+.form-control.is-invalid {
+  border-bottom-color: var(--red-ink);
+  background: rgba(220, 50, 50, 0.04);
+}
+
+.invalid-feedback {
+  font-family: 'Kalam', cursive;
+  font-size: 0.9rem;
+  color: var(--red-ink);
+  font-style: italic;
+}
+
+/* Input group ($ prefix) */
+.input-group {
+  border-bottom: 2px solid var(--rule-line);
+  align-items: flex-end;
+  transition: border-color 0.25s;
+}
+
+.input-group:focus-within {
+  border-bottom-color: #3a6bbf;
+}
+
+.input-group-text {
+  font-family: 'Caveat', cursive;
+  font-size: 1.2rem;
+  font-weight: 700;
+  background: transparent;
+  border: none;
+  color: var(--green-ink);
+  padding: 0.4rem 0.4rem 0.4rem 0.1rem;
+}
+
+.input-group .form-control {
+  border-bottom: none;
+}
+
+/* Checkbox */
+.form-check-input {
+  accent-color: var(--ink-light);
+  cursor: pointer;
+}
+
+.form-check-label {
+  font-family: 'Kalam', cursive;
+  font-size: 0.95rem;
+  color: var(--ink-light);
+  cursor: pointer;
+}
+
+/* ── Buttons ────────────────────────────────────────────── */
+.btn {
+  font-family: 'Caveat', cursive;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  border-radius: 3px;
+  padding: 0.45rem 1.2rem;
+  position: relative;
+  transition: transform 0.15s, box-shadow 0.15s;
+  cursor: pointer;
+}
+
+.btn:hover  { transform: translateY(-2px) rotate(-0.5deg); }
+.btn:active { transform: translateY(1px) rotate(0.2deg); }
+
+.btn-primary {
+  background: var(--ink);
+  border: 2px solid var(--ink);
+  color: #fff;
+  box-shadow: 2px 3px 0 var(--ink-light);
+}
+
+.btn-primary:hover {
+  background: var(--ink-light);
+  border-color: var(--ink-light);
+  color: #fff;
+  box-shadow: 3px 4px 0 var(--ink);
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 2px solid var(--ink-faint);
+  color: var(--ink-light);
+  box-shadow: 2px 3px 0 rgba(0,0,0,0.1);
+}
+
+.btn-secondary:hover {
+  background: var(--paper-dark);
+  border-color: var(--ink-light);
+  color: var(--ink);
+  box-shadow: 3px 4px 0 rgba(0,0,0,0.15);
+}
+
+.btn-warning {
+  background: var(--highlight-b);
+  border: 2px solid #d4a00a;
+  color: var(--ink);
+  box-shadow: 2px 3px 0 rgba(180, 130, 0, 0.3);
+}
+
+.btn-warning:hover {
+  background: #ffd700;
+  border-color: #b8860b;
+  color: var(--ink);
+  box-shadow: 3px 4px 0 rgba(180, 130, 0, 0.4);
+}
+
+.btn-danger {
+  background: #fdecea;
+  border: 2px solid var(--red-ink);
+  color: var(--red-ink);
+  box-shadow: 2px 3px 0 rgba(192, 57, 43, 0.2);
+}
+
+.btn-danger:hover {
+  background: var(--red-ink);
+  border-color: #922b21;
+  color: #fff;
+  box-shadow: 3px 4px 0 rgba(192, 57, 43, 0.35);
+}
+
+/* Small buttons */
+.btn-sm {
+  font-size: 0.95rem;
+  padding: 0.2rem 0.7rem;
+}
+
+/* ── Expense List Page ──────────────────────────────────── */
+.d-flex.justify-content-between h2 {
+  font-family: 'Caveat', cursive;
+  font-size: 2rem;
+}
+
+/* ── Table (Ruled Lines) ────────────────────────────────── */
+.table-responsive {
+  border-radius: 0;
+}
+
+.table {
+  font-family: 'Kalam', cursive;
+  font-size: 1rem;
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 0;
+  background: transparent;
+}
+
+.table thead.table-dark tr {
+  background: transparent !important;
+}
+
+.table thead.table-dark th {
+  font-family: 'Caveat', cursive;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ink) !important;
+  background: transparent !important;
+  border-bottom: 2.5px solid var(--ink) !important;
+  border-top: none !important;
+  padding: 0.5rem 0.75rem;
+  text-transform: none;
+  letter-spacing: 0.04em;
+}
+
+.table tbody tr {
+  transition: background 0.2s;
+  border-bottom: 1px solid var(--rule-line) !important;
+  animation: fadeLineIn 0.3s ease both;
+}
+
+.table tbody tr:nth-child(1)  { animation-delay: 0.05s; }
+.table tbody tr:nth-child(2)  { animation-delay: 0.10s; }
+.table tbody tr:nth-child(3)  { animation-delay: 0.15s; }
+.table tbody tr:nth-child(4)  { animation-delay: 0.20s; }
+.table tbody tr:nth-child(5)  { animation-delay: 0.25s; }
+.table tbody tr:nth-child(6)  { animation-delay: 0.30s; }
+.table tbody tr:nth-child(7)  { animation-delay: 0.35s; }
+.table tbody tr:nth-child(8)  { animation-delay: 0.40s; }
+.table tbody tr:nth-child(9)  { animation-delay: 0.45s; }
+.table tbody tr:nth-child(10) { animation-delay: 0.50s; }
+
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+  background-color: transparent !important;
+  --bs-table-accent-bg: transparent !important;
+}
+
+.table-striped > tbody > tr:nth-of-type(even) > * {
+  background-color: rgba(184, 207, 224, 0.15) !important;
+  --bs-table-accent-bg: rgba(184, 207, 224, 0.15) !important;
+}
+
+.table-hover tbody tr:hover > * {
+  background-color: var(--highlight) !important;
+  --bs-table-accent-bg: var(--highlight) !important;
+  cursor: default;
+}
+
+.table td {
+  padding: 0.55rem 0.75rem;
+  color: var(--ink);
+  border-bottom: 1px solid var(--rule-line);
+  border-top: none !important;
+  vertical-align: middle;
+}
+
+/* Amount column — green ink like accountant's ledger */
+.table td.text-end,
+.table th.text-end {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--green-ink);
+}
+
+/* Total row */
+.table tfoot tr.table-primary > * {
+  background: var(--highlight) !important;
+  border-top: 2px double var(--ink) !important;
+  padding: 0.6rem 0.75rem;
+}
+
+.table tfoot tr.table-primary strong {
+  font-family: 'Caveat', cursive;
+  font-size: 1.2rem;
+  color: var(--green-ink);
+}
+
+/* ── Empty State ────────────────────────────────────────── */
+.text-center.py-5 {
+  padding: 3rem 1rem !important;
+}
+
+.text-center.py-5 p {
+  font-family: 'Caveat', cursive;
+  font-size: 1.4rem;
+  color: var(--ink-faint);
+  font-style: italic;
+}
+
+/* ── Login & Register Cards ─────────────────────────────── */
+.col-md-6.col-lg-4 .card,
+.col-md-6.col-lg-4 .card-body {
+  background-image:
+    repeating-linear-gradient(
+      transparent,
+      transparent calc(var(--line-height-px) - 1px),
+      var(--rule-line-alt) calc(var(--line-height-px) - 1px),
+      var(--rule-line-alt) var(--line-height-px)
+    );
+}
+
+.col-md-6.col-lg-4 .card-body h2 {
+  font-size: 2.4rem;
+  text-align: center;
+}
+
+.col-md-6.col-lg-4 .card-body h2::before {
+  content: '📖 ';
+  font-size: 1.4rem;
+}
+
+/* Register link / login link */
+.text-center small {
+  font-family: 'Kalam', cursive;
+  font-size: 0.95rem;
+  color: var(--ink-light);
+}
+
+.text-center small a {
+  color: #3a6bbf;
+  text-decoration: underline wavy #3a6bbf;
+  font-weight: 700;
+  transition: color 0.2s;
+}
+
+.text-center small a:hover {
+  color: var(--red-ink);
+  text-decoration-color: var(--red-ink);
+}
+
+/* ── Utility overrides ──────────────────────────────────── */
+.shadow {
+  box-shadow:
+    0 2px 6px rgba(0,0,0,0.1),
+    3px 5px 14px rgba(0,0,0,0.12) !important;
+}
+
+.text-muted {
+  color: var(--ink-faint) !important;
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .container::before {
+    background-size: 18px 18px;
+    height: 22px;
+  }
+
+  .container {
+    background-image:
+      linear-gradient(
+        90deg,
+        transparent 44px,
+        var(--margin-line) 44px,
+        var(--margin-line) 46px,
+        transparent 46px
+      ),
+      repeating-linear-gradient(
+        transparent,
+        transparent calc(var(--line-height-px) - 1px),
+        var(--rule-line) calc(var(--line-height-px) - 1px),
+        var(--rule-line) var(--line-height-px)
+      );
+    padding: 0 12px 30px;
+    margin: 10px auto;
+  }
+
+  h2 { font-size: 1.8rem; }
+
+  .navbar-brand { font-size: 1.5rem !important; }
+
+  .table thead { display: none; }
+  .table, .table tbody, .table tr, .table td {
+    display: block;
+    width: 100%;
+  }
+  .table tbody tr {
+    margin-bottom: 0.75rem;
+    border: 1px solid var(--rule-line) !important;
+    border-radius: 4px;
+    padding: 0.5rem;
+    background: rgba(255,255,255,0.5);
+  }
+  .table td {
+    text-align: right !important;
+    padding: 0.3rem 0.5rem;
+    border: none !important;
+  }
+  .table td::before {
+    content: attr(data-label);
+    float: left;
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    color: var(--ink-faint);
+  }
+}
+
+/* ── Print-friendly (remove binding etc.) ───────────────── */
+@media print {
+  body { background: white; }
+  .container::before, .container::after { display: none; }
+  .navbar { display: none; }
+  .container {
+    border: none;
+    box-shadow: none;
+    animation: none;
+  }
+}
